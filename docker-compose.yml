@@ -1,0 +1,36 @@
+services:
+
+  updater:
+    build:
+      context: .
+      target: runtime
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - GROUP_ID=${WISE_OLD_MAN_GROUP_ID}
+      - VERIFICATION_CODE=${WISE_OLD_MAN_VERIFICATION_CODE}
+
+  test:
+    build:
+      context: .
+      target: base
+    working_dir: /app
+    volumes:
+      - .:/app
+    entrypoint:
+      - python
+      - -m
+      - unittest
+
+  generate-dependencies:
+    build:
+      context: .
+      target: base
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - CUSTOM_COMPILE_COMMAND="./bin/generate-dependencies.sh"
+    entrypoint:
+      - pip-compile
