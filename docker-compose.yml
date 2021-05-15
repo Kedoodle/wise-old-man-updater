@@ -6,7 +6,7 @@ services:
       target: runtime
     working_dir: /app
     volumes:
-      - ./src/updater:/app
+      - ./src:/app/src
     environment:
       - GROUP_ID=${WISE_OLD_MAN_GROUP_ID}
       - VERIFICATION_CODE=${WISE_OLD_MAN_VERIFICATION_CODE}
@@ -19,6 +19,9 @@ services:
     volumes:
       - ./src:/app/src
       - ./tests:/app/tests
+    environment:
+      - GROUP_ID=0
+      - VERIFICATION_CODE="123-456-789"
     entrypoint:
       - python
       - -m

@@ -20,4 +20,4 @@ RUN groupadd -r user && useradd -r -g user user
 USER user
 
 # Run application
-ENTRYPOINT ["python", "updater.py"]
+ENTRYPOINT ["python", "-m", "src.updater"]
