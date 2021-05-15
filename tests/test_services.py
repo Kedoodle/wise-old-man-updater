@@ -33,7 +33,7 @@ class TestGetGroupsCompetitions(unittest.TestCase):
         self._mock_get.return_value = Mock(status_code=200)
         self._mock_get.return_value.json.return_value = competitions
 
-        response = get_groups_competitions(Mock())
+        response = get_groups_competitions()
 
         self.assertEqual(response.status_code, 200)
         self.assertListEqual(response.json(), competitions)
@@ -41,7 +41,7 @@ class TestGetGroupsCompetitions(unittest.TestCase):
     def test_when_response_is_not_ok(self):
         self._mock_get.return_value.ok = False
 
-        response = get_groups_competitions(Mock())
+        response = get_groups_competitions()
 
         self.assertIsNone(response)
 

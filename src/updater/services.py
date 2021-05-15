@@ -3,7 +3,7 @@ import requests
 from src.updater.config import BASE_URL, GROUP_ID, VERIFICATION_CODE
 
 
-def get_groups_competitions(id):
+def get_groups_competitions(id=GROUP_ID):
     url = f'{BASE_URL}/groups/{id}/competitions'
     response = requests.get(url)
     return response if response.ok else None
