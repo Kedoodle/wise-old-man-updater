@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from src.updater.services import get_groups_competitions
+from src.updater.services import get_groups_competitions, post_competitions_update_all
 
 
-class TestGroups(unittest.TestCase):
+class TestGetGroupsCompetitions(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._mock_get_patcher = patch('src.updater.services.requests.get')
@@ -14,7 +14,7 @@ class TestGroups(unittest.TestCase):
     def tearDownClass(cls):
         cls._mock_get_patcher.stop()
 
-    def test_get_groups_competitions_when_response_is_ok(self):
+    def test_when_response_is_ok(self):
         competitions = [{
             "id": 2887,
             "title": "Coffee House Construction Comp",
@@ -38,10 +38,40 @@ class TestGroups(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertListEqual(response.json(), competitions)
 
-    def test_get_groups_competitions_when_response_is_not_ok(self):
+    def test_when_response_is_not_ok(self):
         self._mock_get.return_value.ok = False
 
         response = get_groups_competitions(Mock())
+
+        self.assertIsNone(response)
+
+
+class TestPostCompetitionsUpdateAll(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._mock_post_patcher = patch('src.updater.services.requests.post')
+        cls._mock_post = cls._mock_post_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._mock_post_patcher.stop()
+
+    def test_when_response_is_ok(self):
+        message = {
+            "message": "2 outdated (updated < 60 mins ago) players are being updated. This can take up to a few minutes."
+        }
+        self._mock_post.return_value = Mock(status_code=200)
+        self._mock_post.return_value.json.return_value = message
+
+        response = post_competitions_update_all(Mock())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), message)
+
+    def test_when_response_is_not_ok(self):
+        self._mock_post.return_value.ok = False
+
+        response = post_competitions_update_all(Mock())
 
         self.assertIsNone(response)
 
