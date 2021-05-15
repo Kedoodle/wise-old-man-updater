@@ -14,3 +14,7 @@ def _is_active(competition):
 
 def _now():
     return datetime.utcnow()
+
+
+def get_competition_ids(competitions):
+    return [c['id'] for c in competitions]

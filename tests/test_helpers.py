@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch
 
-from src.updater.helpers import filter_active_competitions
+from src.updater.helpers import filter_active_competitions, get_competition_ids
 
 
 class TestFilterActiveCompetitions(unittest.TestCase):
@@ -74,6 +74,40 @@ class TestFilterActiveCompetitions(unittest.TestCase):
         active_competitions = filter_active_competitions(competitions)
 
         self.assertListEqual(active_competitions, competitions[:-1])
+
+
+class TestGetCompetitionIds(unittest.TestCase):
+    def test_when_no_competitions(self):
+        competitions = []
+
+        competition_ids = get_competition_ids(competitions)
+
+        self.assertListEqual(competition_ids, [])
+
+    def test_when_one_competition(self):
+        competitions = [
+            {
+                "id": 2887
+            }
+        ]
+
+        competition_ids = get_competition_ids(competitions)
+
+        self.assertListEqual(competition_ids, [2887])
+
+    def test_when_multiple_competitions(self):
+        competitions = [
+            {
+                "id": 2887
+            },
+            {
+                "id": 2788
+            }
+        ]
+
+        competition_ids = get_competition_ids(competitions)
+
+        self.assertListEqual(competition_ids, [2887, 2788])
 
 
 if __name__ == '__main__':
