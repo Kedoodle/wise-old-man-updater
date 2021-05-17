@@ -1,0 +1,22 @@
+name: cron
+
+on:
+  schedule:
+    - cron: '15/20 * * * *'
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: ./bin/build.sh
+
+      - name: Run Wise Old Man Updater
+        run: ./bin/run.sh
+        env:
+          WISE_OLD_MAN_GROUP_ID: ${{ secrets.WISE_OLD_MAN_GROUP_ID }}
+          WISE_OLD_MAN_VERIFICATION_CODE: ${{ secrets.WISE_OLD_MAN_VERIFICATION_CODE }}
