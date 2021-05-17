@@ -2,7 +2,7 @@ name: cron
 
 on:
   schedule:
-    - cron: '10/15 * * * *'
+    - cron: '15/20 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -17,6 +17,6 @@ jobs:
 
       - name: Run Wise Old Man Updater
         run: ./bin/run.sh
-          env:
-            WISE_OLD_MAN_GROUP_ID: ${{ secrets.WISE_OLD_MAN_GROUP_ID }}
-            WISE_OLD_MAN_VERIFICATION_CODE: ${{ secrets.WISE_OLD_MAN_VERIFICATION_CODE }}
+        env:
+          WISE_OLD_MAN_GROUP_ID: ${{ secrets.WISE_OLD_MAN_GROUP_ID }}
+          WISE_OLD_MAN_VERIFICATION_CODE: ${{ secrets.WISE_OLD_MAN_VERIFICATION_CODE }}
