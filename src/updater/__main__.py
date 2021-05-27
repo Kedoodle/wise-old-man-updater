@@ -1,6 +1,5 @@
-from src.updater.services import get_groups_members, post_competitions_update_all, post_players_track
-from src.updater.helpers import filter_active_competitions, get_competition_ids, filter_outdated_players, \
-    get_player_usernames
+from src.updater.helpers import filter_outdated_players, get_player_usernames
+from src.updater.services import get_groups_members, post_players_track
 
 
 def run():

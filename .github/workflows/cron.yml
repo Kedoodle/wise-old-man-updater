@@ -19,4 +19,3 @@ jobs:
         run: ./bin/run.sh
         env:
           WISE_OLD_MAN_GROUP_ID: ${{ secrets.WISE_OLD_MAN_GROUP_ID }}
-          WISE_OLD_MAN_VERIFICATION_CODE: ${{ secrets.WISE_OLD_MAN_VERIFICATION_CODE }}
