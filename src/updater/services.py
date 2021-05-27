@@ -14,3 +14,9 @@ def post_competitions_update_all(id: int) -> requests.Response:
     body = {'verificationCode': VERIFICATION_CODE}
     response = requests.post(url, json=body)
     return response if response.ok else None
+
+
+def get_groups_members(id: int = GROUP_ID) -> requests.Response:
+    url = f'{BASE_URL}/groups/{id}/members'
+    response = requests.get(url)
+    return response if response.ok else None

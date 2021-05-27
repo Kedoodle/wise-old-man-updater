@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from src.updater.services import get_groups_competitions, post_competitions_update_all
+from src.updater.services import get_groups_competitions, post_competitions_update_all, get_groups_members
 
 
 class TestGetGroupsCompetitions(unittest.TestCase):
@@ -72,6 +72,54 @@ class TestPostCompetitionsUpdateAll(unittest.TestCase):
         self._mock_post.return_value.ok = False
 
         response = post_competitions_update_all(Mock())
+
+        self.assertIsNone(response)
+
+
+class TestGetGroupsMembers(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._mock_get_patcher = patch('src.updater.services.requests.get')
+        cls._mock_get = cls._mock_get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._mock_get_patcher.stop()
+
+    def test_when_response_is_ok(self):
+        members = [{
+            "exp": 287438551,
+            "id": 3033,
+            "username": "kedd",
+            "displayName": "Kedd",
+            "type": "regular",
+            "build": "main",
+            "country": "NZ",
+            "flagged": False,
+            "ehp": 1181.2346,
+            "ehb": 67.81755,
+            "ttm": 127.74393,
+            "tt200m": 13781.21645,
+            "lastImportedAt": "2021-05-27T12:34:58.883Z",
+            "lastChangedAt": "2021-05-27T12:34:57.824Z",
+            "registeredAt": "2020-05-02T22:38:09.634Z",
+            "updatedAt": "2021-05-27T12:34:58.883Z",
+            "role": "member",
+            "joinedAt": "2020-06-28T21:10:06.636Z"
+        }]
+
+        self._mock_get.return_value = Mock(status_code=200)
+        self._mock_get.return_value.json.return_value = members
+
+        response = get_groups_members()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertListEqual(response.json(), members)
+
+    def test_when_response_is_not_ok(self):
+        self._mock_get.return_value.ok = False
+
+        response = get_groups_members()
 
         self.assertIsNone(response)
 
