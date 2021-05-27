@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from src.updater.services import get_groups_competitions, post_competitions_update_all, get_groups_members
+from src.updater.services import get_groups_competitions, post_competitions_update_all, get_groups_members, post_players_track
 
 
 class TestGetGroupsCompetitions(unittest.TestCase):
@@ -179,7 +179,7 @@ class TestPostPlayersTrack(unittest.TestCase):
         self._mock_post.return_value = Mock(status_code=200)
         self._mock_post.return_value.json.return_value = player
 
-        response = post_competitions_update_all(Mock())
+        response = post_players_track(Mock())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), player)
@@ -187,7 +187,7 @@ class TestPostPlayersTrack(unittest.TestCase):
     def test_when_response_is_not_ok(self):
         self._mock_post.return_value.ok = False
 
-        response = post_competitions_update_all(Mock())
+        response = post_players_track(Mock())
 
         self.assertIsNone(response)
 
