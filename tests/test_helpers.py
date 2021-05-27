@@ -144,6 +144,42 @@ class TestFilterOutdatedPlayers(unittest.TestCase):
 
         self.assertListEqual(outdated_players, [])
 
+    def test_when_one_outdated_player(self):
+        players = [
+            {
+                "username": "kedd",
+                "updatedAt": "2021-05-27T14:40:00.000Z"
+            },
+            {
+                "username": "alvx",
+                "updatedAt": "2021-05-27T14:40:33.000Z"
+            }
+        ]
+
+        outdated_players = filter_outdated_players(players)
+
+        self.assertListEqual(outdated_players, [players[0]])
+
+    def test_when_multiple_outdated_players(self):
+        players = [
+            {
+                "username": "kedd",
+                "updatedAt": "2021-05-27T14:40:00.000Z"
+            },
+            {
+                "username": "alvx",
+                "updatedAt": "2021-05-27T14:40:32.000Z"
+            },
+            {
+                "username": "detredwings",
+                "updatedAt": "2021-05-27T14:41:00.000Z"
+            }
+        ]
+
+        outdated_players = filter_outdated_players(players)
+
+        self.assertListEqual(outdated_players, players[:-1])
+
 
 if __name__ == '__main__':
     unittest.main()
