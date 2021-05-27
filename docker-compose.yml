@@ -9,7 +9,6 @@ services:
       - ./src:/app/src
     environment:
       - GROUP_ID=${WISE_OLD_MAN_GROUP_ID}
-      - VERIFICATION_CODE=${WISE_OLD_MAN_VERIFICATION_CODE}
 
   test:
     build:
@@ -21,7 +20,6 @@ services:
       - ./tests:/app/tests
     environment:
       - GROUP_ID=0
-      - VERIFICATION_CODE="123-456-789"
     entrypoint:
       - python
       - -m

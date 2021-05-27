@@ -2,112 +2,112 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch
 
-from src.updater.helpers import filter_active_competitions, get_competition_ids
+from src.updater.helpers import filter_outdated_players, get_player_usernames
 
 
-class TestFilterActiveCompetitions(unittest.TestCase):
+class TestFilterOutdatedPlayers(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls._mock_now_patcher = patch('src.updater.helpers')
+        cls._mock_now_patcher = patch('src.updater.helpers._now')
         cls._mock_now = cls._mock_now_patcher.start()
-        cls._mock_now._now = datetime(2021, 5, 15, 10, 58, 52, 298766)
+        cls._mock_now.return_value = datetime(2021, 5, 27, 14, 41, 32, 709490)
 
     @classmethod
     def tearDownClass(cls):
         cls._mock_now_patcher.stop()
 
-    def test_when_no_competitions(self):
-        competitions = []
+    def test_when_no_players(self):
+        players = []
 
-        active_competitions = filter_active_competitions(competitions)
+        outdated_players = filter_outdated_players(players)
 
-        self.assertListEqual(active_competitions, [])
+        self.assertListEqual(outdated_players, [])
 
-    def test_when_no_active_competitions(self):
-        competitions = [
+    def test_when_no_outdated_players(self):
+        players = [
             {
-                "startsAt": "2021-05-08T00:00:00.000Z",
-                "endsAt": "2021-05-15T00:00:00.000Z",
+                "username": "kedd",
+                "updatedAt": "2021-05-27T14:41:00.000Z"
             },
             {
-                "startsAt": "2021-05-01T00:00:00.000Z",
-                "endsAt": "2021-05-08T00:00:00.000Z"
+                "username": "alvx",
+                "updatedAt": "2021-05-27T14:40:33.000Z"
             }
         ]
 
-        active_competitions = filter_active_competitions(competitions)
+        outdated_players = filter_outdated_players(players)
 
-        self.assertListEqual(active_competitions, [])
+        self.assertListEqual(outdated_players, [])
 
-    def test_when_one_active_competition(self):
-        competitions = [
+    def test_when_one_outdated_player(self):
+        players = [
             {
-                "startsAt": "2021-05-15T00:00:00.000Z",
-                "endsAt": "2021-05-22T00:00:00.000Z",
+                "username": "kedd",
+                "updatedAt": "2021-05-27T14:40:00.000Z"
             },
             {
-                "startsAt": "2021-05-08T00:00:00.000Z",
-                "endsAt": "2021-05-15T00:00:00.000Z",
+                "username": "alvx",
+                "updatedAt": "2021-05-27T14:40:33.000Z"
             }
         ]
 
-        active_competitions = filter_active_competitions(competitions)
+        outdated_players = filter_outdated_players(players)
 
-        self.assertListEqual(active_competitions, [competitions[0]])
+        self.assertListEqual(outdated_players, [players[0]])
 
-    def test_when_multiple_active_competitions(self):
-        competitions = [
+    def test_when_multiple_outdated_players(self):
+        players = [
             {
-                "startsAt": "2021-05-15T00:00:00.000Z",
-                "endsAt": "2021-05-22T00:00:00.000Z",
+                "username": "kedd",
+                "updatedAt": "2021-05-27T14:40:00.000Z"
             },
             {
-                "startsAt": "2021-05-15T00:00:00.000Z",
-                "endsAt": "2021-05-22T00:00:00.000Z",
+                "username": "alvx",
+                "updatedAt": "2021-05-27T14:40:32.000Z"
             },
             {
-                "startsAt": "2021-05-08T00:00:00.000Z",
-                "endsAt": "2021-05-15T00:00:00.000Z",
+                "username": "detredwings",
+                "updatedAt": "2021-05-27T14:41:00.000Z"
             }
         ]
 
-        active_competitions = filter_active_competitions(competitions)
+        outdated_players = filter_outdated_players(players)
 
-        self.assertListEqual(active_competitions, competitions[:-1])
+        self.assertListEqual(outdated_players, players[:-1])
 
 
-class TestGetCompetitionIds(unittest.TestCase):
-    def test_when_no_competitions(self):
-        competitions = []
+class TestGetPlayerUsernames(unittest.TestCase):
+    def test_when_no_players(self):
+        players = []
 
-        competition_ids = get_competition_ids(competitions)
+        usernames = get_player_usernames(players)
 
-        self.assertListEqual(competition_ids, [])
+        self.assertListEqual(usernames, [])
 
-    def test_when_one_competition(self):
-        competitions = [
+    def test_when_one_player(self):
+        players = [
             {
-                "id": 2887
+                "username": "kedd"
             }
         ]
 
-        competition_ids = get_competition_ids(competitions)
+        usernames = get_player_usernames(players)
 
-        self.assertListEqual(competition_ids, [2887])
+        self.assertListEqual(usernames, ["kedd"])
 
-    def test_when_multiple_competitions(self):
-        competitions = [
+    def test_when_multiple_players(self):
+        players = [
             {
-                "id": 2887
+                "username": "kedd"
             },
             {
-                "id": 2788
+                "username": "alvx"
             }
         ]
 
-        competition_ids = get_competition_ids(competitions)
+        usernames = get_player_usernames(players)
 
-        self.assertListEqual(competition_ids, [2887, 2788])
+        self.assertListEqual(usernames, ["kedd", "alvx"])
 
 
 if __name__ == '__main__':
