@@ -86,6 +86,13 @@ class TestGetGroupsMembers(unittest.TestCase):
     def tearDownClass(cls):
         cls._mock_get_patcher.stop()
 
+    def test_api_endpoint_is_called(self):
+        group_id = Mock()
+
+        get_groups_members(group_id)
+
+        self._mock_get.assert_called_once_with(f"https://api.wiseoldman.net/groups/{group_id}/members")
+
     def test_when_response_is_ok(self):
         members = [{
             "exp": 287438551,
@@ -133,6 +140,13 @@ class TestPostPlayersTrack(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls._mock_post_patcher.stop()
+
+    def test_api_endpoint_is_called(self):
+        username = Mock()
+
+        post_players_track(username)
+
+        self._mock_post.assert_called_once_with("https://api.wiseoldman.net/players/track", json={"username": username})
 
     def test_when_response_is_ok(self):
         player = {
