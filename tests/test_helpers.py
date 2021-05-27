@@ -8,9 +8,9 @@ from src.updater.helpers import filter_active_competitions, get_competition_ids
 class TestFilterActiveCompetitions(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls._mock_now_patcher = patch('src.updater.helpers')
+        cls._mock_now_patcher = patch('src.updater.helpers._now')
         cls._mock_now = cls._mock_now_patcher.start()
-        cls._mock_now._now = datetime(2021, 5, 15, 10, 58, 52, 298766)
+        cls._mock_now.return_value = datetime(2021, 5, 15, 10, 58, 52, 298766)
 
     @classmethod
     def tearDownClass(cls):
