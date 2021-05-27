@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch
 
-from src.updater.helpers import filter_active_competitions, get_competition_ids
+from src.updater.helpers import filter_active_competitions, get_competition_ids, filter_outdated_players
 
 
 class TestFilterActiveCompetitions(unittest.TestCase):
@@ -108,6 +108,41 @@ class TestGetCompetitionIds(unittest.TestCase):
         competition_ids = get_competition_ids(competitions)
 
         self.assertListEqual(competition_ids, [2887, 2788])
+
+
+class TestFilterOutdatedPlayers(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._mock_now_patcher = patch('src.updater.helpers._now')
+        cls._mock_now = cls._mock_now_patcher.start()
+        cls._mock_now.return_value = datetime(2021, 5, 27, 14, 41, 32, 709490)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._mock_now_patcher.stop()
+
+    def test_when_no_players(self):
+        players = []
+
+        outdated_players = filter_outdated_players(players)
+
+        self.assertListEqual(outdated_players, [])
+
+    def test_when_no_outdated_players(self):
+        players = [
+            {
+                "username": "kedd",
+                "updatedAt": "2021-05-27T14:41:00.000Z"
+            },
+            {
+                "username": "alvx",
+                "updatedAt": "2021-05-27T14:40:33.000Z"
+            }
+        ]
+
+        outdated_players = filter_outdated_players(players)
+
+        self.assertListEqual(outdated_players, [])
 
 
 if __name__ == '__main__':

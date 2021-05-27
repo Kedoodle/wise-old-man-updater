@@ -18,3 +18,7 @@ def _now() -> datetime:
 
 def get_competition_ids(competitions: list) -> list[int]:
     return [c['id'] for c in competitions]
+
+
+def filter_outdated_players(players: list) -> list[dict]:
+    return []
