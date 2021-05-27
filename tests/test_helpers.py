@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch
 
-from src.updater.helpers import filter_active_competitions, get_competition_ids, filter_outdated_players
+from src.updater.helpers import filter_active_competitions,get_competition_ids, filter_outdated_players, get_player_usernames
 
 
 class TestFilterActiveCompetitions(unittest.TestCase):
@@ -179,6 +179,40 @@ class TestFilterOutdatedPlayers(unittest.TestCase):
         outdated_players = filter_outdated_players(players)
 
         self.assertListEqual(outdated_players, players[:-1])
+
+
+class TestGetPlayerUsernames(unittest.TestCase):
+    def test_when_no_players(self):
+        players = []
+
+        usernames = get_player_usernames(players)
+
+        self.assertListEqual(usernames, [])
+
+    def test_when_one_player(self):
+        players = [
+            {
+                "username": "kedd"
+            }
+        ]
+
+        usernames = get_player_usernames(players)
+
+        self.assertListEqual(usernames, ["kedd"])
+
+    def test_when_multiple_players(self):
+        players = [
+            {
+                "username": "kedd"
+            },
+            {
+                "username": "alvx"
+            }
+        ]
+
+        usernames = get_player_usernames(players)
+
+        self.assertListEqual(usernames, ["kedd", "alvx"])
 
 
 if __name__ == '__main__':

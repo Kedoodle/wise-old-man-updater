@@ -29,3 +29,7 @@ def _is_player_outdated(player: dict) -> bool:
     updated_at = datetime.strptime(player['updatedAt'], fmt)
     outdated_at = updated_at + timedelta(seconds=60)
     return _now() >= outdated_at
+
+
+def get_player_usernames(players: list) -> list[str]:
+    return [p['username'] for p in players]
